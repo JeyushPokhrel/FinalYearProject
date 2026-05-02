@@ -4,3 +4,4 @@ transformers
 torch
 scikit-learn
 sentencepiece
+sentence-transformers
