@@ -11,7 +11,7 @@ class ChatRequest(BaseModel):
 
 @app.on_event("startup")
 def startup_event():
-    print("🚀 Initializing search engine...")
+    print("Initializing search engine...")
     threading.Thread(target=initialize_search_engine).start()
 
 @app.get("/")
