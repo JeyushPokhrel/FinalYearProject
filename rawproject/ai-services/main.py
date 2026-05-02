@@ -4,7 +4,6 @@ from pydantic import BaseModel
 from contextlib import asynccontextmanager
 
 import search_engine
-from deep_translator import GoogleTranslator
 import re
 
 # =========================================
@@ -26,6 +25,7 @@ async def lifespan(app: FastAPI):
 # FASTAPI APP
 # =========================================
 
+print("Initializing FastAPI application...")
 app = FastAPI(lifespan=lifespan)
 
 # =========================================
@@ -68,6 +68,7 @@ async def health():
 @app.post("/chat")
 async def chat(request: ChatRequest):
     try:
+        from deep_translator import GoogleTranslator
         question = request.message.strip()
         needs_translation = is_nepali(question)
 

@@ -1,8 +1,6 @@
 import os
 import json
 import numpy as np
-from sentence_transformers import SentenceTransformer
-from sklearn.metrics.pairwise import cosine_similarity
 import gc
 
 # =========================================
@@ -31,7 +29,7 @@ LAW_NAMES = {
 def initialize_search_engine():
     """
     Initialize the search engine: load documents and encode them.
-    This is called in the background after the server starts.
+    Heavy imports are moved inside here to allow the server to start instantly.
     """
     global model, doc_embeddings, documents, is_initialized
     
@@ -39,7 +37,10 @@ def initialize_search_engine():
         return
 
     try:
-        print("Starting Search Engine initialization...")
+        # Move heavy imports inside to prevent blocking the main thread during startup
+        from sentence_transformers import SentenceTransformer
+        
+        print("Starting Search Engine initialization in background...")
         temp_texts = []
         temp_documents = []
 
@@ -47,7 +48,7 @@ def initialize_search_engine():
         for filename in os.listdir(DATA_FOLDER):
             if filename.endswith(".json"):
                 filepath = os.path.join(DATA_FOLDER, filename)
-                print(f"Loading {filename}")
+                print(f"Loading {filename} metadata...")
 
                 with open(filepath, "r", encoding="utf-8") as file:
                     data = json.load(file)
@@ -94,7 +95,7 @@ def initialize_search_engine():
         print(f"Search Engine ready! Documents loaded: {len(documents)}")
 
     except Exception as e:
-        print(f"Initialization error: {e}")
+        print(f"Initialization error in background thread: {e}")
 
 
 # =========================================
@@ -198,6 +199,7 @@ def search_legal_documents(query, top_k=3):
     query_embedding = model.encode([query])
 
     # Calculate semantic similarity
+    from sklearn.metrics.pairwise import cosine_similarity
     similarities = cosine_similarity(query_embedding, doc_embeddings).flatten()
 
     # Get top matching indices
