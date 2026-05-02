@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  @apply bg-gray-50 text-gray-900 dark:bg-[#121212] dark:text-white transition-colors duration-300;
+}
+
+/* Markdown Styles for Chat */
+.markdown-content {
+  line-height: 1.6;
+}
+
+.markdown-content p {
+  margin-bottom: 0.75rem;
+}
+
+.markdown-content p:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-content h1, .markdown-content h2, .markdown-content h3 {
+  font-weight: 700;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  @apply text-blue-600 dark:text-[#c69f6f];
+}
+
+.markdown-content ul, .markdown-content ol {
+  margin-bottom: 0.75rem;
+  padding-left: 1.5rem;
+}
+
+.markdown-content ul {
+  list-style-type: disc;
+}
+
+.markdown-content ol {
+  list-style-type: decimal;
+}
+
+.markdown-content li {
+  margin-bottom: 0.25rem;
+}
+
+.markdown-content strong {
+  font-weight: 700;
+}
+
+.markdown-content blockquote {
+  @apply border-l-4 border-blue-500/30 dark:border-[#c69f6f]/30 pl-4 py-1 my-4 italic bg-gray-50/50 dark:bg-[#1a1614]/50 rounded-r-lg;
+  color: inherit;
+}
+
+.markdown-content code {
+  @apply bg-gray-100 dark:bg-[#4a3b35] px-1 rounded font-mono text-sm;
+}
