@@ -13,15 +13,9 @@ class ChatRequest(BaseModel):
 
 @app.on_event("startup")
 def startup_event():
-    # If on Render, we might want to initialize synchronously so the service 
-    # doesn't report 'Live' until the model is actually loaded.
-    if os.getenv("RENDER"):
-        print(f"[{time.ctime()}] Render environment detected. Initializing search engine...")
-        # We still use a thread but we can add a small delay or check
-        threading.Thread(target=initialize_search_engine).start()
-    else:
-        print(f"[{time.ctime()}] Local environment detected. Initializing in background...")
-        threading.Thread(target=initialize_search_engine).start()
+    print(f"[{time.ctime()}] Starting application...")
+    # Always run in thread to prevent blocking the health check
+    threading.Thread(target=initialize_search_engine).start()
 
 @app.get("/")
 def root():
@@ -32,10 +26,11 @@ def root():
 
 @app.get("/health")
 def health():
-    from search_engine import is_initialized
+    import search_engine
     return {
         "status": "ok",
-        "ready": is_initialized
+        "ready": search_engine.is_initialized,
+        "engine": "TF-IDF (Lightweight)" if search_engine.use_fallback else "Semantic (AI)"
     }
 
 @app.post("/chat")
