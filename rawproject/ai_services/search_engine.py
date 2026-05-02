@@ -18,37 +18,50 @@ def initialize_search_engine():
     if is_initialized:
         return
 
-    print(f"Initializing Search Engine from: {BASE_DIR}")
-    
     doc_path = os.path.join(BASE_DIR, "documents.json")
     if not os.path.exists(doc_path):
-        raise FileNotFoundError(f"Missing documents.json at {doc_path}")
+        raise FileNotFoundError(f"Missing documents.json")
 
-    # 1. Load documents
     with open(doc_path, "r", encoding="utf-8") as f:
         documents = json.load(f)
 
-    # 2. Build TF-IDF Index
-    texts = []
-    for d in documents:
-        # Combine everything we know for better matching
-        search_text = f"{d.get('law', '')} {d.get('section', '')} {d.get('title', '')}"
-        texts.append(search_text)
+    print("Indexing full content for high accuracy...")
     
+    # ACCURACY BOOST: Index both Title AND Content
+    full_texts = []
+    for d in documents:
+        # Get basic metadata
+        meta = f"{d.get('law', '')} {d.get('section', '')} {d.get('title', '')}"
+        
+        # Try to get actual content for the index
+        content = ""
+        try:
+            law_file = d['law'].replace(" ", "_")
+            file_path = os.path.join(BASE_DIR, "data", f"{law_file}.json")
+            if os.path.exists(file_path):
+                with open(file_path, "r", encoding="utf-8") as f_content:
+                    data = json.load(f_content)
+                    section_data = data.get(d['section'])
+                    if section_data:
+                        content = section_data.get("content", "")
+        except:
+            pass
+            
+        full_texts.append(f"{meta} {content}".lower())
+
     tfidf_vectorizer = TfidfVectorizer(
         stop_words='english',
-        ngram_range=(1, 3) # Up to 3-word phrases for better accuracy
+        ngram_range=(1, 2),
+        max_features=10000 # Keep it memory efficient
     )
-    tfidf_matrix = tfidf_vectorizer.fit_transform(texts)
+    tfidf_matrix = tfidf_vectorizer.fit_transform(full_texts)
     
     is_initialized = True
-    print("Search Engine Initialized Successfully")
+    print("Full-Text Search Engine Ready")
 
 def _get_content_info(law, section):
     try:
-        # Try both space and underscore versions
         law_variants = [law, law.replace(" ", "_")]
-        
         for variant in law_variants:
             file_path = os.path.join(BASE_DIR, "data", f"{variant}.json")
             if os.path.exists(file_path):
@@ -60,8 +73,7 @@ def _get_content_info(law, section):
                         content = section_data.get("content", "").strip()
                         return f"{title}\n\n{content}".strip()
         return None
-    except Exception as e:
-        print(f"Error loading section {section} from {law}: {e}")
+    except:
         return None
 
 def search_legal_documents(query, top_k=3):
@@ -70,7 +82,7 @@ def search_legal_documents(query, top_k=3):
 
     query = query.lower().strip()
     
-    # Simple greeting detection
+    # Greetings
     if query in ["hi", "hello", "hey", "namaste"]:
         return ("Namaste! I am your AI Legal Assistant. How can I help you today?", 100)
 
@@ -78,7 +90,6 @@ def search_legal_documents(query, top_k=3):
     query_tfidf = tfidf_vectorizer.transform([query])
     similarities = cosine_similarity(query_tfidf, tfidf_matrix).flatten()
     
-    # Get top results
     top_indices = similarities.argsort()[-top_k:][::-1]
     
     results = []
@@ -86,7 +97,7 @@ def search_legal_documents(query, top_k=3):
 
     for idx in top_indices:
         score = float(similarities[idx])
-        if score < 0.01: # Very low threshold to catch more results
+        if score < 0.01:
             continue
             
         doc = documents[idx].copy()
@@ -98,13 +109,14 @@ def search_legal_documents(query, top_k=3):
             scores.append(score)
 
     if not results:
-        return ("I'm sorry, I couldn't find any specific legal matches for that. Could you try rephrasing or using a specific legal term?", 0)
+        return ("I couldn't find any specific legal sections matching your query. Please try searching for specific terms like 'Theft', 'Property', or 'Section 5'.", 0)
 
     response = "Based on the Nepali legal documents, here are the relevant sections:\n\n"
     for doc in results:
-        response += f"### {doc['law']} - {doc['section']}\n"
+        response += f"#### {doc['law']} - {doc['section']}\n"
         response += f"{doc['full_text']}\n\n"
         response += "---\n\n"
 
-    display_confidence = min(max(scores) * 300, 100) if scores else 0
+    # Scale score for UI
+    display_confidence = min(max(scores) * 250, 100) if scores else 0
     return (response, display_confidence)
