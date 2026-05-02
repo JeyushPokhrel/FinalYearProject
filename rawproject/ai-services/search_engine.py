@@ -3,16 +3,20 @@ import json
 import numpy as np
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
+import gc
 
 # =========================================
-# LOAD ALL LEGAL JSON FILES
+# GLOBALS & CONFIG
 # =========================================
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_FOLDER = os.path.join(BASE_DIR, "data")
 
+# Global state for lazy initialization
+model = None
+doc_embeddings = None
 documents = []
-texts = []
+is_initialized = False
 
 # Friendly law name mapping
 LAW_NAMES = {
@@ -24,64 +28,74 @@ LAW_NAMES = {
     "Evidence_Act": "Evidence Act, 2031 (1974)",
 }
 
-for filename in os.listdir(DATA_FOLDER):
-    if filename.endswith(".json"):
-        filepath = os.path.join(DATA_FOLDER, filename)
-        print(f"Loading {filename}")
+def initialize_search_engine():
+    """
+    Initialize the search engine: load documents and encode them.
+    This is called in the background after the server starts.
+    """
+    global model, doc_embeddings, documents, is_initialized
+    
+    if is_initialized:
+        return
 
-        with open(filepath, "r", encoding="utf-8") as file:
-            data = json.load(file)
+    try:
+        print("Starting Search Engine initialization...")
+        temp_texts = []
+        temp_documents = []
 
-            if isinstance(data, dict):
-                for section_name, section_data in data.items():
-                    if not isinstance(section_data, dict):
-                        continue
+        # 1. Load legal JSON files (Metadata only)
+        for filename in os.listdir(DATA_FOLDER):
+            if filename.endswith(".json"):
+                filepath = os.path.join(DATA_FOLDER, filename)
+                print(f"Loading {filename}")
 
-                    title = str(section_data.get("title", "")).strip()
-                    content = str(section_data.get("content", "")).strip()
-                    full_text = f"{title} {content}".strip()
+                with open(filepath, "r", encoding="utf-8") as file:
+                    data = json.load(file)
 
-                    if len(full_text) == 0:
-                        continue
+                    if isinstance(data, dict):
+                        for section_name, section_data in data.items():
+                            if not isinstance(section_data, dict):
+                                continue
 
-                    law_key = filename.replace(".json", "")
-                    # Store ONLY metadata to save massive RAM
-                    # Content will be loaded from JSON files only when needed for the final response
-                    documents.append({
-                        "law": law_key,
-                        "law_name": LAW_NAMES.get(law_key, law_key),
-                        "section": section_name,
-                        "title": title,
-                        # "content": content  <-- REMOVED to save memory
-                    })
-                    texts.append(full_text)
+                            title = str(section_data.get("title", "")).strip()
+                            content = str(section_data.get("content", "")).strip()
+                            full_text = f"{title} {content}".strip()
 
-# =========================================
-# CHECK IF DATA EXISTS
-# =========================================
+                            if len(full_text) == 0:
+                                continue
 
-print(f"Total documents loaded: {len(documents)}")
+                            law_key = filename.replace(".json", "")
+                            temp_documents.append({
+                                "law": law_key,
+                                "law_name": LAW_NAMES.get(law_key, law_key),
+                                "section": section_name,
+                                "title": title
+                            })
+                            temp_texts.append(full_text)
 
-if len(texts) == 0:
-    raise Exception("No valid legal text found in JSON files.")
+        if not temp_texts:
+            print("No valid legal text found.")
+            return
 
-# =========================================
-# SENTENCE TRANSFORMER MODEL (Semantic Search)
-# =========================================
+        # 2. Load Model
+        print("Loading sentence transformer model (CPU optimized)...")
+        model = SentenceTransformer('all-MiniLM-L6-v2', device='cpu')
 
-print("Loading sentence transformer model (CPU optimized)...")
-# Force CPU for memory efficiency on limited RAM environments like Render
-model = SentenceTransformer('all-MiniLM-L6-v2', device='cpu')
+        # 3. Encode Documents
+        print("Encoding legal documents (reduced batch size)...")
+        doc_embeddings = model.encode(temp_texts, show_progress_bar=False, batch_size=16)
+        
+        # 4. Cleanup to save RAM
+        documents = temp_documents
+        temp_texts.clear()
+        gc.collect()
+        
+        is_initialized = True
+        print(f"Search Engine ready! Documents loaded: {len(documents)}")
 
-print("Encoding legal documents (reduced batch size for memory)...")
-# Reduced batch_size to avoid RAM spikes
-doc_embeddings = model.encode(texts, show_progress_bar=True, batch_size=16)
-print(f"Document encoding complete! Shape: {doc_embeddings.shape}")
+    except Exception as e:
+        print(f"Initialization error: {e}")
 
-# CRITICAL: Clear texts list after encoding to free up a lot of RAM
-texts.clear()
-import gc
-gc.collect()
 
 # =========================================
 # INTENT CLASSIFICATION
@@ -131,7 +145,6 @@ def classify_intent(query):
         if keyword in q:
             return "legal"
 
-    # If similarity with our docs is high enough, it's legal even without keywords
     return "unknown"
 
 
@@ -157,6 +170,13 @@ def search_legal_documents(query, top_k=3):
     Search legal documents using semantic similarity.
     Returns a tuple: (response_text, confidence_percentage)
     """
+    if not is_initialized:
+        return (
+            "I am currently initializing my legal database. This usually takes about a minute "
+            "during a fresh deployment. Please try your question again in a moment!",
+            0.0
+        )
+
     intent = classify_intent(query)
 
     # Handle greetings

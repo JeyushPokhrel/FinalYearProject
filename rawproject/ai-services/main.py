@@ -1,18 +1,32 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from contextlib import asynccontextmanager
 
-from search_engine import search_legal_documents
-
-import json
-import os
+import search_engine
+from deep_translator import GoogleTranslator
 import re
+
+# =========================================
+# LIFESPAN (Startup/Shutdown)
+# =========================================
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # This runs on startup
+    # We trigger the heavy initialization in the background
+    # so that the server can bind to the port immediately
+    from threading import Thread
+    thread = Thread(target=search_engine.initialize_search_engine)
+    thread.start()
+    yield
+    # Cleanup logic (if any) goes here
 
 # =========================================
 # FASTAPI APP
 # =========================================
 
-app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 
 # =========================================
 # CORS
@@ -34,32 +48,25 @@ class ChatRequest(BaseModel):
     message: str
 
 # =========================================
-# ROOT ROUTE
+# ROUTES
 # =========================================
 
 @app.get("/")
 async def root():
     return {
-        "message": "AI Legal Assistant Running"
+        "message": "AI Legal Assistant Running",
+        "status": "Ready" if search_engine.is_initialized else "Initializing"
     }
 
-# =========================================
-# LANGUAGE DETECTION
-# =========================================
-
-from deep_translator import GoogleTranslator
-
-def is_nepali(text):
-    """Check if the text contains Devanagari script characters."""
-    return bool(re.search(r'[\u0900-\u097F]', text))
-
-# =========================================
-# CHAT ROUTE
-# =========================================
+@app.get("/health")
+async def health():
+    if search_engine.is_initialized:
+        return {"status": "healthy"}
+    else:
+        return {"status": "initializing"}
 
 @app.post("/chat")
 async def chat(request: ChatRequest):
-
     try:
         question = request.message.strip()
         needs_translation = is_nepali(question)
@@ -70,16 +77,15 @@ async def chat(request: ChatRequest):
         else:
             search_query = question
 
-        # 2. Search legal documents (handles greetings, legal, and off-topic internally)
-        result_text, confidence_score = search_legal_documents(search_query)
+        # 2. Search legal documents
+        result_text, confidence_score = search_engine.search_legal_documents(search_query)
 
         # 3. Translate result back to Nepali if user asked in Nepali
-        if needs_translation and result_text:
-            # GoogleTranslator has a ~5000 character limit, so chunk if needed
+        if needs_translation and result_text and search_engine.is_initialized:
+            # GoogleTranslator has a ~5000 character limit
             if len(result_text) <= 4900:
                 final_reply = GoogleTranslator(source='en', target='ne').translate(result_text)
             else:
-                # Translate in chunks
                 chunks = []
                 words = result_text.split('\n\n')
                 current_chunk = ""
@@ -118,41 +124,6 @@ async def chat(request: ChatRequest):
             "error": str(e)
         }
 
-# =========================================
-# DOCUMENTS ROUTE
-# =========================================
-
-@app.get("/documents/{law_name}")
-async def get_documents(law_name: str):
-
-    try:
-        # path to JSON file
-        file_path = f"data/{law_name}.json"
-
-        # check file exists
-        if not os.path.exists(file_path):
-            return {
-                "error": "Law file not found"
-            }
-
-        # open json file
-        with open(file_path, "r", encoding="utf-8") as file:
-            data = json.load(file)
-
-        documents = []
-
-        # loop through sections
-        for section_name, section_data in data.items():
-            documents.append({
-                "section": section_name,
-                "title": section_data.get("title", ""),
-                "content": section_data.get("content", "")
-            })
-
-        return documents
-
-    except Exception as e:
-        print(e)
-        return {
-            "error": str(e)
-        }
+def is_nepali(text):
+    """Check if the text contains Devanagari script characters."""
+    return bool(re.search(r'[\u0900-\u097F]', text))
