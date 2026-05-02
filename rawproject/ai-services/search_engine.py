@@ -67,12 +67,14 @@ if len(texts) == 0:
 # SENTENCE TRANSFORMER MODEL (Semantic Search)
 # =========================================
 
-print("Loading sentence transformer model...")
-model = SentenceTransformer('all-MiniLM-L6-v2')
+print("Loading sentence transformer model (CPU optimized)...")
+# Force CPU for memory efficiency on limited RAM environments like Render
+model = SentenceTransformer('all-MiniLM-L6-v2', device='cpu')
 
-print("Encoding legal documents (this may take a moment on first run)...")
-doc_embeddings = model.encode(texts, show_progress_bar=True, batch_size=64)
-print("Document encoding complete!")
+print("Encoding legal documents (reduced batch size for memory)...")
+# Reduced batch_size from 64 to 16 to avoid RAM spikes on 512MB instances
+doc_embeddings = model.encode(texts, show_progress_bar=True, batch_size=16)
+print(f"Document encoding complete! Shape: {doc_embeddings.shape}")
 
 # =========================================
 # INTENT CLASSIFICATION
