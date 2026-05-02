@@ -1,10 +1,6 @@
---extra-index-url https://download.pytorch.org/whl/cpu
 
 fastapi
-uvicorn[standard]
-torch
+uvicorn
 sentence-transformers
 scikit-learn
-sentencepiece
-deep-translator
 numpy
