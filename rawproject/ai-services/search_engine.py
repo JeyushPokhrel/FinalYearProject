@@ -45,12 +45,14 @@ for filename in os.listdir(DATA_FOLDER):
                         continue
 
                     law_key = filename.replace(".json", "")
+                    # Store ONLY metadata to save massive RAM
+                    # Content will be loaded from JSON files only when needed for the final response
                     documents.append({
                         "law": law_key,
                         "law_name": LAW_NAMES.get(law_key, law_key),
                         "section": section_name,
                         "title": title,
-                        "content": content
+                        # "content": content  <-- REMOVED to save memory
                     })
                     texts.append(full_text)
 
@@ -72,9 +74,14 @@ print("Loading sentence transformer model (CPU optimized)...")
 model = SentenceTransformer('all-MiniLM-L6-v2', device='cpu')
 
 print("Encoding legal documents (reduced batch size for memory)...")
-# Reduced batch_size from 64 to 16 to avoid RAM spikes on 512MB instances
+# Reduced batch_size to avoid RAM spikes
 doc_embeddings = model.encode(texts, show_progress_bar=True, batch_size=16)
 print(f"Document encoding complete! Shape: {doc_embeddings.shape}")
+
+# CRITICAL: Clear texts list after encoding to free up a lot of RAM
+texts.clear()
+import gc
+gc.collect()
 
 # =========================================
 # INTENT CLASSIFICATION
@@ -132,6 +139,19 @@ def classify_intent(query):
 # MAIN SEARCH FUNCTION
 # =========================================
 
+def _get_content_on_demand(law_key, section_name):
+    """Fetch content from JSON only when needed to save RAM."""
+    try:
+        filepath = os.path.join(DATA_FOLDER, f"{law_key}.json")
+        with open(filepath, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            section_data = data.get(section_name, {})
+            return section_data.get("content", "")
+    except Exception as e:
+        print(f"Error loading content: {e}")
+        return ""
+
+
 def search_legal_documents(query, top_k=3):
     """
     Search legal documents using semantic similarity.
@@ -172,8 +192,15 @@ def search_legal_documents(query, top_k=3):
         # Semantic similarity threshold
         if score < 0.25:
             continue
-
-        results.append(documents[idx])
+        
+        # Load content ON DEMAND for the top matches
+        doc_metadata = documents[idx]
+        content = _get_content_on_demand(doc_metadata['law'], doc_metadata['section'])
+        
+        doc_with_content = doc_metadata.copy()
+        doc_with_content['content'] = content
+        
+        results.append(doc_with_content)
         scores.append(score)
 
     max_score = max(scores) if scores else 0.0
