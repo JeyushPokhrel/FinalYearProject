@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
-import ChatSidebar from "../components/ChatSidebar/ChatSidebar"
+import ChatSidebar from "../components/chatsidebar/ChatSidebar"
 import SignInPopUp from "../components/pop-up/SignInPopUp"
 
 const ChatbotPage = () => {
@@ -334,4 +334,3 @@ const ChatbotPage = () => {
 }
 
 export default ChatbotPage;
-

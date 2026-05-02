@@ -1,5 +1,5 @@
 import { useState } from "react";
-import LawCard from "../components/LawCard/LawCard";
+import LawCard from "../components/lawcard/LawCard";
 import { getLaws } from "../data/laws";
 import { useTranslation } from "react-i18next";
 
