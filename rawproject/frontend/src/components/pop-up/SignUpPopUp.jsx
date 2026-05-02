@@ -25,7 +25,7 @@ const SignUpPopUp = ({ onClose }) => {
       setLoading(true)
 
       const response = await axios.post(
-        "http://localhost:5000/api/auth/register",
+        "https://finalyearproject-ian2.onrender.com/api/auth/register",
         {
           name,
           email,
