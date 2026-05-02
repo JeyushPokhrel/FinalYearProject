@@ -1,37 +1,27 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-import threading
 import os
-import time
 
 from search_engine import initialize_search_engine, search_legal_documents
 
-app = FastAPI(title="AI Legal Assistant API")
+app = FastAPI(title="AI Legal Assistant API (Lightweight)")
 
 class ChatRequest(BaseModel):
     message: str
 
 @app.on_event("startup")
 def startup_event():
-    print(f"[{time.ctime()}] Starting application...")
-    # Always run in thread to prevent blocking the health check
-    threading.Thread(target=initialize_search_engine).start()
+    # Initialize TF-IDF (Fast and Low Memory)
+    initialize_search_engine()
 
 @app.get("/")
 def root():
-    return {
-        "message": "AI Legal Assistant API is running",
-        "environment": "Render" if os.getenv("RENDER") else "Local"
-    }
+    return {"message": "Lightweight AI Legal Assistant Running"}
 
 @app.get("/health")
 def health():
-    import search_engine
-    return {
-        "status": "ok",
-        "ready": search_engine.is_initialized,
-        "engine": "TF-IDF (Lightweight)" if search_engine.use_fallback else "Semantic (AI)"
-    }
+    from search_engine import is_initialized
+    return {"status": "ok", "ready": is_initialized, "mode": "Lightweight"}
 
 @app.post("/chat")
 def chat(req: ChatRequest):
