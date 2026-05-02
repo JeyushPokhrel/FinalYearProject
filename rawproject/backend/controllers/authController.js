@@ -2,7 +2,7 @@ import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-
+const getSecretKey = () => process.env.JWT_SECRET_KEY || process.env.JWT_SECRET || "default_secret_key";
 
 const register = async (req, res) => {
   try {
@@ -36,8 +36,8 @@ const register = async (req, res) => {
 
     const token = jwt.sign(
       { id: newUser._id, role: newUser.role },
-      process.env.JWT_SECRET_KEY,
-      { expiresIn: "1h" }
+      getSecretKey(),
+      { expiresIn: "24h" }
     );
 
     res.status(201).json({
@@ -54,12 +54,10 @@ const register = async (req, res) => {
   } catch (error) {
     console.error("Register error:", error.message);
     res.status(500).json({
-      message: "Something went wrong"
+      message: `Registration Error: ${error.message}`
     });
   }
 };
-
-
 
 const login = async (req, res) => {
   try {
@@ -83,8 +81,8 @@ const login = async (req, res) => {
 
     const token = jwt.sign(
       { id: user._id, role: user.role },
-      process.env.JWT_SECRET_KEY,
-      { expiresIn: "1h" }
+      getSecretKey(),
+      { expiresIn: "24h" }
     );
 
     res.status(200).json({
@@ -99,7 +97,9 @@ const login = async (req, res) => {
 
   } catch (error) {
     console.error("Login error:", error.message);
-    res.status(500).json({ message: "Something went wrong" });
+    res.status(500).json({ 
+        message: `Login Error: ${error.message}` 
+    });
   }
 };
 
