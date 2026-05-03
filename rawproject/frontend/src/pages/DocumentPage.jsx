@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import   { useState } from "react";
 import {
   faScaleBalanced,
   faGavel,
@@ -9,6 +9,8 @@ import {
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslation } from "react-i18next";
+import { getLaws } from "../data/laws";
+import { faFileContract } from "@fortawesome/free-solid-svg-icons";
 
 const getDocumentsData = (t) => [
   {
@@ -70,7 +72,23 @@ const getDocumentsData = (t) => [
 
 const DocumentsPage = () => {
   const { t } = useTranslation();
-  const documentsData = getDocumentsData(t);
+  
+  // Combine static categories with individual laws
+  const documentsData = [
+    ...getDocumentsData(t),
+    ...getLaws(t).map(law => ({
+      id: `law-${law.id}`,
+      title: law.title,
+      icon: faFileContract,
+      short: law.description,
+      details: [
+        `Enactment Year: ${law.date} B.S.`,
+        `Source: ${law.source}`,
+        ...law.links.map(link => `Link: ${link.name} (${link.url})`)
+      ]
+    }))
+  ];
+  
   const [selectedLaw, setSelectedLaw] = useState(null);
 
   return (

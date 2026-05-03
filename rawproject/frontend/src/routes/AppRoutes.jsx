@@ -13,7 +13,9 @@ const AppRoutes = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/chatbot" element={<ChatbotPage />} />
         <Route path="/law-explorer" element={<LawExplorerPage/>} />
+        <Route path="/lawexplorer" element={<LawExplorerPage/>} /> {/* Alias for convenience */}
         <Route path="/documents" element={<DocumentsPage />} />
+        <Route path="*" element={<HomePage />} /> {/* Catch-all redirect to home */}
 
       </Routes>
     </div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import LawCard from "../components/lawcard/LawCard";
 import { getLaws } from "../data/laws";
 import { useTranslation } from "react-i18next";
@@ -7,6 +7,13 @@ export default function LawExplorer() {
   const { t } = useTranslation();
   const laws = getLaws(t);
   const [selectedLaw, setSelectedLaw] = useState(null);
+  const detailsRef = useRef(null);
+
+  useEffect(() => {
+    if (selectedLaw && detailsRef.current) {
+      detailsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [selectedLaw]);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
@@ -32,7 +39,10 @@ export default function LawExplorer() {
 
         {/* DETAILS PANEL */}
         {selectedLaw && (
-          <div className="mt-12 bg-white/80 dark:bg-[#1a1614]/80 backdrop-blur-xl border border-gray-200/50 dark:border-[#3d312d] p-10 rounded-[2rem] transition-all duration-500 shadow-2xl animate-in fade-in slide-in-from-bottom-4">
+          <div 
+            ref={detailsRef}
+            className="mt-12 bg-white/80 dark:bg-[#1a1614]/80 backdrop-blur-xl border border-gray-200/50 dark:border-[#3d312d] p-10 rounded-[2rem] transition-all duration-500 shadow-2xl animate-in fade-in slide-in-from-bottom-4"
+          >
             <div className="flex flex-col md:flex-row md:items-start justify-between mb-8 gap-6">
               <div className="flex-1">
                 <h2 className="text-blue-600 dark:text-[#c69f6f] text-4xl font-extrabold tracking-tight mb-2">
