@@ -67,13 +67,26 @@ export const getLaws = (t) => [
     id:5,
     title:t('law_5_title'),
     description:t('law_5_desc'),
-    source:"Electronic Transactions Act, 2063 ",
+    source:"Nepal Law Commission, The Electronic Transactions Act, 2063 (2008). Document accessed via the International Labour Organization (ILO) database. ",
     date:"2063",
     links:[
       {
-        name:"Electronic Transactions Act, 2063",
+        name:"Electronic Transactions Act, 2063 (English)",
         url:"https://www.ilo.org/resource/electronic-transactions-act-2063-2008"
       }
     ]
   },
+  {
+    id:6,
+    title:t('law_6_title'),
+    description:t('law_6_desc'),
+    source:"Nepal Law Commission, The Labour Act, 2017 (2074). Document accessed via the International Labour Organization (ILO) database",
+    date:"2074",
+    links:[
+      {
+        name:"Labour Act, 2017 (English)",
+        url:"https://www.ilo.org/dyn/natlex/docs/webpdf/67973"
+      }
+    ] 
+  }
 ];
