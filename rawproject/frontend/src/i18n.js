@@ -95,7 +95,8 @@ const resources = {
       "law_3_title": "Muluki Criminal Code & Procedure (2074)",
       "law_3_desc": "The legal code defining criminal offenses, penalties, and the procedural rules for criminal justice in Nepal.",
       "law_4_title": "Evidence Act (2031)",
-      "law_4_desc": "The primary law governing the admissibility, relevancy, and examination of evidence in judicial proceedings in Nepal."
+      "law_4_desc": "The primary law governing the admissibility, relevancy, and examination of evidence in judicial proceedings in Nepal.",
+      "error_msg": "Sorry, I'm having trouble connecting to the AI service. Please try again in a moment."
     }
   },
   ne: {
@@ -191,7 +192,8 @@ const resources = {
       "law_3_title": "मुलुकी फौजदारी संहिता र कार्यविधि (२०७४)",
       "law_3_desc": "नेपालमा आपराधिक अपराध, सजाय, र फौजदारी न्यायको लागि प्रक्रियात्मक नियमहरू परिभाषित गर्ने कानुनी संहिता।",
       "law_4_title": "प्रमाण ऐन (२०३१)",
-      "law_4_desc": "नेपालमा न्यायिक कारबाहीमा प्रमाणको ग्राह्यता, सान्दर्भिकता, र परीक्षण नियन्त्रण गर्ने प्रमुख कानुन।"
+      "law_4_desc": "नेपालमा न्यायिक कारबाहीमा प्रमाणको ग्राह्यता, सान्दर्भिकता, र परीक्षण नियन्त्रण गर्ने प्रमुख कानुन।",
+      "error_msg": "माफ गर्नुहोस्, मलाई एआई सेवासँग जडान गर्न समस्या भइरहेको छ। कृपया एकछिन पछि फेरि प्रयास गर्नुहोस्।"
     }
   }
 };

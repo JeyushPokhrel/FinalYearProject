@@ -4,6 +4,7 @@ import { Link } from "react-router-dom"
 import { useState, useEffect } from "react"
 
 import { useTranslation } from "react-i18next";
+import toast from "react-hot-toast";
 import { useTheme } from "../../contexts/ThemeContext";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -33,6 +34,7 @@ const Navbar = () => {
 
     setIsLoggedIn(false)
     setShowLogout(false)
+    toast.success("Successful logout")
   }
 
   return (

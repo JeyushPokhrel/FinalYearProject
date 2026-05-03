@@ -1,4 +1,4 @@
-// src/components/LogoBackground.jsx
+ 
 import logo from "../assets/logo.png";
 
 export default function LogoBackground() {

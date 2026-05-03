@@ -7,4 +7,4 @@ const router = express.Router();
 router.post("/", chatWithAI);
 router.get("/history", getChatHistory);
 
-export default router;
+export default router;

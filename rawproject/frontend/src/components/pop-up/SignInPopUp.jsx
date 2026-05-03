@@ -2,15 +2,18 @@ import { useState } from "react"
 import axios from "axios"
 import SignUpPopUp from "./SignUpPopUp"
 import { useTranslation } from "react-i18next";
+import toast from "react-hot-toast";
 
-const SignInPopUp = ({ onClose }) => {
+const SignInPopUp = ({ onClose}) => {
   const { t } = useTranslation();
   const [showSignUp, setShowSignUp] = useState(false)
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
   if (showSignUp) {
-    return <SignUpPopUp onClose={onClose} />
+    return <SignUpPopUp onClose={onClose}
+      switchToSignIn={() => setShowSignUp(false)}
+    />
   }
 
   const handleSubmit = async (e) => {
@@ -39,7 +42,8 @@ const SignInPopUp = ({ onClose }) => {
       localStorage.setItem("user", JSON.stringify(response.data.user))
       localStorage.setItem("isLoggedIn", "true")
 
-      onClose()
+      toast.success("Successful signIn")
+      onClose();
 
     } catch (err) {
 

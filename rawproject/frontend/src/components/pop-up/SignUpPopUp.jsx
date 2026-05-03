@@ -1,8 +1,9 @@
 import { useState } from "react"
 import axios from "axios"
 import { useTranslation } from "react-i18next";
+import toast from "react-hot-toast";
 
-const SignUpPopUp = ({ onClose }) => {
+const SignUpPopUp = ({ onClose, switchToSignIn }) => {
   const { t } = useTranslation();
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -36,11 +37,8 @@ const SignUpPopUp = ({ onClose }) => {
 
       console.log(response.data)
 
-      localStorage.setItem("token", response.data.token)
-      localStorage.setItem("user", JSON.stringify(response.data.user))
-      localStorage.setItem("isLoggedIn", "true")
-
-      onClose()
+      toast.success("Registration successful! Please sign in.")
+      switchToSignIn()
 
     } catch (err) {
 

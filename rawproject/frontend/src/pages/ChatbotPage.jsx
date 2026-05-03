@@ -148,7 +148,9 @@ const ChatbotPage = () => {
         setShowSignIn(true)
         setMessages(prev => [...prev, { role: 'ai', text: error.response.data.message }])
       } else {
-        setMessages(prev => [...prev, { role: 'ai', text: t('error_msg') || "Something went wrong." }])
+        // Show specific error from backend if available, else fallback to translation
+        const errorText = error.response?.data?.message || t('error_msg') || "Something went wrong.";
+        setMessages(prev => [...prev, { role: 'ai', text: errorText }])
       }
     } finally {
       setLoading(false)

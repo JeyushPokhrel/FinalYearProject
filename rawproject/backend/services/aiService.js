@@ -14,7 +14,7 @@ const askAI = async (message) => {
     const response = await axios.post(
       AI_URL,
       { message },
-      { timeout: 15000 } // Add timeout for Render cold starts
+      { timeout: 60000 } // Add timeout for Render cold starts (increased to 60s)
     );
     return response.data;
   } catch (error) {
