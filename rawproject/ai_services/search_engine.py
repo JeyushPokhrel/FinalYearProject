@@ -25,39 +25,24 @@ def initialize_search_engine():
     with open(doc_path, "r", encoding="utf-8") as f:
         documents = json.load(f)
 
-    print("Indexing full content for high accuracy...")
+    print("Indexing metadata for speed and memory efficiency...")
     
-    # ACCURACY BOOST: Index both Title AND Content
-    full_texts = []
+    # LIGHTWEIGHT INDEXING: Index Law Name, Section and Title only
+    # This prevents OOM errors on Render (512MB limit)
+    metadata_texts = []
     for d in documents:
-        # Get basic metadata
         meta = f"{d.get('law', '')} {d.get('section', '')} {d.get('title', '')}"
-        
-        # Try to get actual content for the index
-        content = ""
-        try:
-            law_file = d['law'].replace(" ", "_")
-            file_path = os.path.join(BASE_DIR, "data", f"{law_file}.json")
-            if os.path.exists(file_path):
-                with open(file_path, "r", encoding="utf-8") as f_content:
-                    data = json.load(f_content)
-                    section_data = data.get(d['section'])
-                    if section_data:
-                        content = section_data.get("content", "")
-        except:
-            pass
-            
-        full_texts.append(f"{meta} {content}".lower())
+        metadata_texts.append(meta.lower())
 
     tfidf_vectorizer = TfidfVectorizer(
         stop_words='english',
         ngram_range=(1, 2),
-        max_features=10000 # Keep it memory efficient
+        max_features=5000 # Reduced features for memory safety
     )
-    tfidf_matrix = tfidf_vectorizer.fit_transform(full_texts)
+    tfidf_matrix = tfidf_vectorizer.fit_transform(metadata_texts)
     
     is_initialized = True
-    print("Full-Text Search Engine Ready")
+    print("Lightweight Search Engine Ready")
 
 def _get_content_info(law, section):
     try:
