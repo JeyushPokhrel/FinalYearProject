@@ -62,5 +62,18 @@ export const getLaws = (t) => [
         url: "https://www.unodc.org/cld/uploads/res/document/npl/1977/nepal_evidence_act_2031_html/NEPAL_evidence-act-2031-1974.pdf"
       }
     ]
-  }
+  },
+  {
+    id:5,
+    title:t('law_5_title'),
+    description:t('law_5_desc'),
+    source:"Electronic Transactions Act, 2063 ",
+    date:"2063",
+    links:[
+      {
+        name:"Electronic Transactions Act, 2063",
+        url:"https://www.ilo.org/resource/electronic-transactions-act-2063-2008"
+      }
+    ]
+  },
 ];
