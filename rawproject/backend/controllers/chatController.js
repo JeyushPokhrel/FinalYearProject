@@ -55,7 +55,7 @@ const chatWithAI = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      message: "AI Error",
+      message: `AI Error: ${error.message}`,
       error: error.message
     });
   }
