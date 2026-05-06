@@ -1,6 +1,6 @@
 import SignInPopUp from "../pop-up/SignInPopUp"
 import LogoutPopUp from "../pop-up/LogoutPopUp"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react"
 
 import { useTranslation } from "react-i18next";
@@ -18,6 +18,7 @@ const Navbar = () => {
   const [userRole, setUserRole] = useState("user")
   const { t, i18n } = useTranslation();
   const { theme, toggleTheme } = useTheme();
+  const navigate = useNavigate();
 
   const toggleLanguage = () => {
     i18n.changeLanguage(i18n.language === 'en' ? 'ne' : 'en');
@@ -44,18 +45,6 @@ const Navbar = () => {
     toast.success("Successful logout")
   }
 
-  const handleDashboardClick = (e) => {
-    e.preventDefault();
-    if (isLoggedIn) {
-      if (userRole === "admin") {
-        window.location.href = "/admin";
-      } else {
-        toast.error("Access denied. Admin privileges required.");
-      }
-    } else {
-      setShowAdminPrompt(true);
-    }
-  };
 
   return (
     <>
@@ -80,15 +69,24 @@ const Navbar = () => {
     </h1>
   </Link>
 
-            {(userRole === "admin" || !isLoggedIn) && (
+            {isLoggedIn && userRole === "admin" && (
               <Link
                 to="/admin"
-                onClick={handleDashboardClick}
                 className="hover:text-blue-800 dark:hover:text-[#c69f6f] transition-colors duration-300"
               >
                 {t('dashboard')}
               </Link>
             )}
+
+            {!isLoggedIn && (
+              <button
+                onClick={() => setShowAdminPrompt(true)}
+                className="hover:text-blue-800 dark:hover:text-[#c69f6f] transition-colors duration-300 cursor-pointer"
+              >
+                {t('dashboard')}
+              </button>
+            )}
+
 
             <Link
               to="/chatbot"
@@ -157,7 +155,7 @@ const Navbar = () => {
 
         // Automatically redirect admin to dashboard on login
         if (user.role === "admin") {
-          window.location.href = "/admin";
+          navigate("/admin");
         }
       }
     }}

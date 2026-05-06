@@ -11,14 +11,26 @@ const AdminDashboard = () => {
 
     useEffect(() => {
         const fetchStats = async () => {
+            console.log("Fetching admin stats...");
             try {
                 const token = localStorage.getItem("token");
+                if (!token) {
+                    console.error("No token found in localStorage");
+                    toast.error("You must be logged in as admin");
+                    return;
+                }
                 const response = await axios.get(`${API_BASE_URL}/admin/stats`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
-                setStats(response.data);
+                console.log("Stats received:", response.data);
+                if (response.data.success || response.data.totalUsers !== undefined) {
+                    setStats({
+                        totalUsers: response.data.totalUsers || 0,
+                        activeUsers: response.data.activeUsers || 0
+                    });
+                }
             } catch (error) {
-                console.error("Error fetching stats:", error);
+                console.error("Error fetching stats:", error.response?.data || error.message);
                 toast.error("Failed to load dashboard stats");
             } finally {
                 setLoading(false);
@@ -27,6 +39,7 @@ const AdminDashboard = () => {
 
         fetchStats();
     }, []);
+
 
     return (
         <div className="min-h-screen bg-[#f8f9fa] dark:bg-[#121212] p-8 transition-colors duration-300">

@@ -10,6 +10,7 @@ const SignUpPopUp = ({ onClose, switchToSignIn }) => {
   const [password, setPassword] = useState("")
   const [name, setName] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
+  const [reqRole, setReqRole] = useState("user")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
@@ -33,6 +34,7 @@ const SignUpPopUp = ({ onClose, switchToSignIn }) => {
           email,
           password,
           confirmPassword,
+          role: reqRole
         }
       )
 
@@ -149,6 +151,21 @@ const SignUpPopUp = ({ onClose, switchToSignIn }) => {
             />
           </div>
 
+          {/* ROLE (For testing) */}
+          <div>
+            <label className="block text-sm mb-1 text-gray-700 dark:text-gray-300">
+              Role
+            </label>
+            <select
+              className="w-full border border-gray-300 dark:border-[#3a3a3a] rounded-md px-3 py-2 text-gray-900 dark:text-white bg-gray-50 dark:bg-black focus:ring-2 focus:ring-blue-600 dark:focus:ring-[#c69f6f] outline-none transition-colors"
+              value={reqRole}
+              onChange={(e) => setReqRole(e.target.value)}
+            >
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+
           {/* SUBMIT BUTTON */}
           <button
             type="submit"
@@ -157,6 +174,7 @@ const SignUpPopUp = ({ onClose, switchToSignIn }) => {
           >
             {loading ? t('signing_up') : t('sign_up_title')}
           </button>
+
 
         </form>
       </div>
