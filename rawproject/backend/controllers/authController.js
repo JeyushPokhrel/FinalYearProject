@@ -79,6 +79,10 @@ const login = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
+    // Update user to refresh 'updatedAt' for active user tracking
+    user.updatedAt = new Date();
+    await user.save();
+
     const token = jwt.sign(
       { id: user._id, role: user.role },
       getSecretKey(),

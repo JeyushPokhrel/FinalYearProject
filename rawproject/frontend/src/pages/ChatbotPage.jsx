@@ -3,6 +3,7 @@ import axios from "axios"
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import API_BASE_URL from "../api";
 
 import ChatSidebar from "../components/chatsidebar/ChatSidebar"
 import SignInPopUp from "../components/pop-up/SignInPopUp"
@@ -69,7 +70,7 @@ const ChatbotPage = () => {
       if (isLoggedIn) {
         try {
           const token = localStorage.getItem("token");
-          const response = await axios.get("https://finalyearproject-ian2.onrender.com/api/chat/history", {
+          const response = await axios.get(`${API_BASE_URL}/chat/history`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
@@ -112,7 +113,7 @@ const ChatbotPage = () => {
       const token = localStorage.getItem("token");
       
       const response = await axios.post(
-        "https://finalyearproject-ian2.onrender.com/api/chat",
+        `${API_BASE_URL}/chat`,
         { message: userMessage },
         {
           headers: {

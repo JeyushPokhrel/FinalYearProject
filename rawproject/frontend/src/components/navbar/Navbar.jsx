@@ -13,7 +13,9 @@ import { faScaleBalanced, faSun, faMoon, faGlobe } from "@fortawesome/free-solid
 const Navbar = () => {
   const [showSignIn, setShowSignIn] = useState(false)
   const [showLogout, setShowLogout] = useState(false)
+  const [showAdminPrompt, setShowAdminPrompt] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [userRole, setUserRole] = useState("user")
   const { t, i18n } = useTranslation();
   const { theme, toggleTheme } = useTheme();
 
@@ -23,19 +25,37 @@ const Navbar = () => {
 
   useEffect(() => {
     const loggedIn = localStorage.getItem("isLoggedIn")
+    const user = JSON.parse(localStorage.getItem("user") || "{}")
 
     if (loggedIn === "true") {
       setIsLoggedIn(true)
+      setUserRole(user.role || "user")
     }
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("isLoggedIn")
+    localStorage.removeItem("user")
+    localStorage.removeItem("token")
 
     setIsLoggedIn(false)
+    setUserRole("user")
     setShowLogout(false)
     toast.success("Successful logout")
   }
+
+  const handleDashboardClick = (e) => {
+    e.preventDefault();
+    if (isLoggedIn) {
+      if (userRole === "admin") {
+        window.location.href = "/admin";
+      } else {
+        toast.error("Access denied. Admin privileges required.");
+      }
+    } else {
+      setShowAdminPrompt(true);
+    }
+  };
 
   return (
     <>
@@ -60,12 +80,15 @@ const Navbar = () => {
     </h1>
   </Link>
 
-            <Link
-              to="/"
-              className="hover:text-blue-800 dark:hover:text-[#c69f6f] transition-colors duration-300"
-            >
-              {t('dashboard')}
-            </Link>
+            {(userRole === "admin" || !isLoggedIn) && (
+              <Link
+                to="/admin"
+                onClick={handleDashboardClick}
+                className="hover:text-blue-800 dark:hover:text-[#c69f6f] transition-colors duration-300"
+              >
+                {t('dashboard')}
+              </Link>
+            )}
 
             <Link
               to="/chatbot"
@@ -126,13 +149,47 @@ const Navbar = () => {
       setShowSignIn(false)
 
       const loggedIn = localStorage.getItem("isLoggedIn")
+      const user = JSON.parse(localStorage.getItem("user") || "{}")
 
       if (loggedIn === "true") {
         setIsLoggedIn(true)
+        setUserRole(user.role || "user")
+
+        // Automatically redirect admin to dashboard on login
+        if (user.role === "admin") {
+          window.location.href = "/admin";
+        }
       }
     }}
   />
 )}
+
+      {/* ADMIN PROMPT */}
+      {showAdminPrompt && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+          <div className="bg-white dark:bg-[#1b1b1b] p-8 rounded-2xl shadow-2xl w-[400px] border border-gray-200 dark:border-[#2a2a2a] text-center">
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Are you the admin?</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-8">This section is reserved for administrative tasks only.</p>
+            <div className="flex gap-4 justify-center">
+              <button 
+                onClick={() => setShowAdminPrompt(false)}
+                className="px-6 py-2 rounded-xl border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+              >
+                No, Go Back
+              </button>
+              <button 
+                onClick={() => {
+                  setShowAdminPrompt(false);
+                  setShowSignIn(true);
+                }}
+                className="px-6 py-2 rounded-xl bg-blue-600 dark:bg-[#c2a878] text-white dark:text-[#302623] font-bold hover:opacity-90 transition"
+              >
+                Yes, Login
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* LOGOUT POPUP */}
       {showLogout && (

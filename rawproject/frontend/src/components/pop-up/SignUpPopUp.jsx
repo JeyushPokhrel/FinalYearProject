@@ -2,6 +2,7 @@ import { useState } from "react"
 import axios from "axios"
 import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
+import API_BASE_URL from "../../api";
 
 const SignUpPopUp = ({ onClose, switchToSignIn }) => {
   const { t } = useTranslation();
@@ -26,7 +27,7 @@ const SignUpPopUp = ({ onClose, switchToSignIn }) => {
       setLoading(true)
 
       const response = await axios.post(
-        "https://finalyearproject-ian2.onrender.com/api/auth/register",
+        `${API_BASE_URL}/auth/register`,
         {
           name,
           email,

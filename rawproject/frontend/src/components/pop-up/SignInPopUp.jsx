@@ -3,6 +3,7 @@ import axios from "axios"
 import SignUpPopUp from "./SignUpPopUp"
 import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
+import API_BASE_URL from "../../api";
 
 const SignInPopUp = ({ onClose}) => {
   const { t } = useTranslation();
@@ -28,7 +29,7 @@ const SignInPopUp = ({ onClose}) => {
       setLoading(true)
 
       const response = await axios.post(
-        "https://finalyearproject-ian2.onrender.com/api/auth/login",
+        `${API_BASE_URL}/auth/login`,
         {
           email,
           password,
