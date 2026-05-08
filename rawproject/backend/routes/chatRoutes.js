@@ -5,7 +5,7 @@ import { verifyToken } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/", verifyToken, chatWithAI);
+router.post("/",  chatWithAI);
 router.get("/history", verifyToken, getChatHistory);
 
 export default router;
