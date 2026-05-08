@@ -257,7 +257,9 @@ const resources = {
       "law_19_desc":"यो ऐनले वातावरणीय व्यवस्थापन, प्रदूषण नियन्त्रण र प्राकृतिक स्रोतको दिगो उपयोगका लागि कानुनी ढाँचा स्थापना गर्दछ।",
       "law_20_title":"सम्पत्ति शुद्धीकरण निवारण ऐन, २०६४",
       "law_20_desc":"यस ऐनको मुख्य उद्देश्य आपराधिक क्रियाकलापबाट प्राप्त पैसाको शुद्धीकरण रोक्नु र वित्तीय अपराधहरू नियन्त्रण गर्नु हो।",
-      "error_msg": "माफ गर्नुहोस्, मलाई एआई सेवासँग जडान गर्न समस्या भइरहेको छ। कृपया एकछिन पछि फेरि प्रयास गर्नुहोस्।"
+      "error_msg": "माफ गर्नुहोस्, म,लाई एआई सेवासँग जडान गर्न समस्या भइरहेको छ। कृपया एकछिन पछि फेरि प्रयास गर्नुहोस्।",
+      "disclaimer":"अस्वीकरण",
+      "This AI assistant provides general legal information for educational and informational purposes only. It is not a lawyer and does not provide legal advice. Laws may change and legal outcomes depend on specific facts and circumstances. Please consult a qualified lawyer or licensed legal professional for advice regarding your situation.":"यो AI सहायकले केवल शैक्षिक तथा जानकारीमूलक उद्देश्यका लागि सामान्य कानुनी जानकारी प्रदान गर्दछ। यो कुनै वकिल होइन र यसले कानुनी परामर्श प्रदान गर्दैन। कानुन समयअनुसार परिवर्तन हुन सक्छन्, र कानुनी निष्कर्षहरू विशेष तथ्य तथा परिस्थितिमा निर्भर हुन्छन्। आफ्नो अवस्थासम्बन्धी उचित परामर्शका लागि कृपया योग्य वकिल वा इजाजतप्राप्त कानुनी विशेषज्ञसँग परामर्श गर्नुहोस्।"
     }
   }
 };
