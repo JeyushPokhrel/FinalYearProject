@@ -27,8 +27,7 @@ const CATEGORIES = [
     label: "Foundational Law",
     subtitle: "The supreme law of Nepal",
     icon: faLandmark,
-    gradient: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
-    accent: "#e2b96f",
+    accent: "#c2a878",
     lawIds: [1],
   },
   {
@@ -36,8 +35,7 @@ const CATEGORIES = [
     label: "Procedural & Evidence",
     subtitle: "Civil, criminal procedure & evidence",
     icon: faGavel,
-    gradient: "linear-gradient(135deg, #1c0a3b 0%, #2d1b69 50%, #11998e 100%)",
-    accent: "#a78bfa",
+    accent: "#c2a878",
     lawIds: [2, 3, 4],
   },
   {
@@ -45,8 +43,7 @@ const CATEGORIES = [
     label: "Economic & Financial",
     subtitle: "Taxation, commerce & banking",
     icon: faCoins,
-    gradient: "linear-gradient(135deg, #0d2137 0%, #1a4a6b 50%, #d4af37 100%)",
-    accent: "#fbbf24",
+    accent: "#c2a878",
     lawIds: [11, 12, 13, 14, 15, 20],
   },
   {
@@ -54,8 +51,7 @@ const CATEGORIES = [
     label: "Labour & Employment",
     subtitle: "Workers' rights & foreign employment",
     icon: faBriefcase,
-    gradient: "linear-gradient(135deg, #0a2e1a 0%, #155724 50%, #28a745 100%)",
-    accent: "#6ee7b7",
+    accent: "#c2a878",
     lawIds: [6, 10],
   },
   {
@@ -63,8 +59,7 @@ const CATEGORIES = [
     label: "Property & Land",
     subtitle: "Land rights & ownership laws",
     icon: faHouseChimney,
-    gradient: "linear-gradient(135deg, #2e1a0a 0%, #6b3d1a 50%, #d97706 100%)",
-    accent: "#fdba74",
+    accent: "#c2a878",
     lawIds: [7],
   },
   {
@@ -72,8 +67,7 @@ const CATEGORIES = [
     label: "Social Protection",
     subtitle: "Domestic safety & consumer rights",
     icon: faHandHoldingHeart,
-    gradient: "linear-gradient(135deg, #2e0a1a 0%, #6b1a3a 50%, #e91e8c 100%)",
-    accent: "#f9a8d4",
+    accent: "#c2a878",
     lawIds: [8, 17],
   },
   {
@@ -81,8 +75,7 @@ const CATEGORIES = [
     label: "Governance & Rights",
     subtitle: "Local governance & information access",
     icon: faCity,
-    gradient: "linear-gradient(135deg, #0a1a2e 0%, #0e3460 50%, #1565c0 100%)",
-    accent: "#93c5fd",
+    accent: "#c2a878",
     lawIds: [9, 16],
   },
   {
@@ -90,8 +83,7 @@ const CATEGORIES = [
     label: "Digital & Modern",
     subtitle: "Electronic transactions & cyber law",
     icon: faMicrochip,
-    gradient: "linear-gradient(135deg, #0d0d2e 0%, #1a1a6e 50%, #00b4d8 100%)",
-    accent: "#67e8f9",
+    accent: "#c2a878",
     lawIds: [5],
   },
   {
@@ -99,8 +91,7 @@ const CATEGORIES = [
     label: "Intellectual Property & Environment",
     subtitle: "Copyright & environmental protection",
     icon: faLeaf,
-    gradient: "linear-gradient(135deg, #0a2e1a 0%, #1b4332 50%, #52b788 100%)",
-    accent: "#bbf7d0",
+    accent: "#c2a878",
     lawIds: [18, 19],
   },
 ];
@@ -129,8 +120,8 @@ const DocumentsPage = () => {
             &nbsp; Back to {cat.label}
           </button>
 
-          <div className="doc-detail-header" style={{ borderColor: cat.accent + "44" }}>
-            <div className="doc-detail-icon-wrap" style={{ background: cat.gradient }}>
+          <div className="doc-detail-header">
+            <div className="doc-detail-icon-wrap">
               <FontAwesomeIcon icon={faBook} style={{ color: cat.accent }} />
             </div>
             <div>
@@ -195,9 +186,9 @@ const DocumentsPage = () => {
     return (
       <div className="doc-page">
         {/* Category Hero Banner */}
-        <div className="doc-cat-banner" style={{ background: cat.gradient }}>
+        <div className="doc-cat-banner">
           <button
-            className="doc-back-btn doc-back-btn--light"
+            className="doc-back-btn"
             onClick={() => setSelectedCategory(null)}
           >
             <FontAwesomeIcon icon={faArrowLeft} />
@@ -226,12 +217,10 @@ const DocumentsPage = () => {
               key={law.id}
               className="doc-law-card"
               onClick={() => setSelectedLaw(law)}
-              style={{ "--cat-accent": cat.accent }}
             >
               <div className="doc-law-card-top">
                 <div
                   className="doc-law-icon"
-                  style={{ background: cat.gradient }}
                 >
                   <FontAwesomeIcon icon={faFile} style={{ color: cat.accent }} />
                 </div>
@@ -274,9 +263,7 @@ const DocumentsPage = () => {
               key={cat.id}
               className="doc-cat-card"
               onClick={() => setSelectedCategory(cat)}
-              style={{ "--cat-gradient": cat.gradient, "--cat-accent": cat.accent }}
             >
-              <div className="doc-cat-card-bg" style={{ background: cat.gradient }} />
               <div className="doc-cat-card-content">
                 <div className="doc-cat-icon-circle">
                   <FontAwesomeIcon icon={cat.icon} style={{ color: cat.accent }} />
@@ -384,31 +371,25 @@ const DocumentsPage = () => {
           border-radius: 20px;
           overflow: hidden;
           cursor: pointer;
-          transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), box-shadow 0.3s;
+          transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), box-shadow 0.3s, border-color 0.3s;
           min-height: 220px;
           display: flex;
           flex-direction: column;
+          background: #fff;
+          border: 1px solid #e2e8f0;
+        }
+        .dark .doc-cat-card {
+          background: #111111;
+          border-color: #2a2a2a;
         }
         .doc-cat-card:hover {
           transform: translateY(-6px) scale(1.02);
-          box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+          box-shadow: 0 24px 60px rgba(0,0,0,0.1);
+          border-color: #1d4ed8;
         }
-        .doc-cat-card-bg {
-          position: absolute;
-          inset: 0;
-          z-index: 0;
-        }
-        .doc-cat-card::after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: rgba(0,0,0,0.25);
-          border-radius: 20px;
-          z-index: 1;
-          transition: background 0.3s;
-        }
-        .doc-cat-card:hover::after {
-          background: rgba(0,0,0,0.1);
+        .dark .doc-cat-card:hover {
+          box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+          border-color: #c2a878;
         }
         .doc-cat-card-content {
           position: relative;
@@ -421,18 +402,22 @@ const DocumentsPage = () => {
         .doc-cat-icon-circle {
           width: 52px; height: 52px;
           border-radius: 14px;
-          background: rgba(255,255,255,0.12);
-          backdrop-filter: blur(8px);
+          background: #f1f5f9;
           display: flex;
           align-items: center;
           justify-content: center;
           font-size: 1.4rem;
           margin-bottom: 1rem;
-          border: 1px solid rgba(255,255,255,0.15);
           transition: background 0.3s;
         }
+        .dark .doc-cat-icon-circle {
+          background: #1e1e1e;
+        }
         .doc-cat-card:hover .doc-cat-icon-circle {
-          background: rgba(255,255,255,0.2);
+          background: #e2e8f0;
+        }
+        .dark .doc-cat-card:hover .doc-cat-icon-circle {
+          background: #2a2a2a;
         }
         .doc-cat-name {
           font-size: 1.2rem;
@@ -442,9 +427,12 @@ const DocumentsPage = () => {
         }
         .doc-cat-subtitle {
           font-size: 0.875rem;
-          color: rgba(255,255,255,0.65);
+          color: #64748b;
           margin: 0 0 1rem;
           line-height: 1.5;
+        }
+        .dark .doc-cat-subtitle {
+          color: #94a3b8;
         }
         .doc-cat-preview {
           display: flex;
@@ -458,10 +446,13 @@ const DocumentsPage = () => {
           align-items: center;
           gap: 0.5rem;
           font-size: 0.8rem;
-          color: rgba(255,255,255,0.8);
+          color: #64748b;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+        }
+        .dark .doc-cat-preview-item {
+          color: #94a3b8;
         }
         .doc-cat-preview-icon {
           font-size: 0.7rem;
@@ -469,7 +460,7 @@ const DocumentsPage = () => {
         }
         .doc-cat-preview-more {
           font-size: 0.75rem;
-          color: rgba(255,255,255,0.5);
+          color: #94a3b8;
           font-style: italic;
           margin-top: 0.2rem;
         }
@@ -483,7 +474,12 @@ const DocumentsPage = () => {
           font-weight: 600;
           padding: 0.3rem 0.75rem;
           border-radius: 100px;
-          backdrop-filter: blur(8px);
+          background: #f1f5f9;
+          color: #1e3a8a;
+        }
+        .dark .doc-cat-law-count {
+          background: #1e1e1e;
+          color: #c2a878;
         }
         .doc-cat-explore {
           font-size: 0.85rem;
@@ -505,8 +501,13 @@ const DocumentsPage = () => {
           max-width: 1200px;
           margin-left: auto;
           margin-right: auto;
-          margin-bottom: 2rem;
+          background: #fff;
+          border: 1px solid #e2e8f0;
           position: relative;
+        }
+        .dark .doc-cat-banner {
+          background: #111111;
+          border-color: #2a2a2a;
         }
         .doc-cat-banner-inner {
           display: flex;
@@ -517,11 +518,14 @@ const DocumentsPage = () => {
         .doc-cat-banner-icon {
           width: 60px; height: 60px;
           border-radius: 16px;
-          background: rgba(255,255,255,0.12);
-          backdrop-filter: blur(8px);
+          background: #f1f5f9;
           display: flex; align-items: center; justify-content: center;
           font-size: 1.6rem;
-          border: 1px solid rgba(255,255,255,0.2);
+          border: 1px solid #e2e8f0;
+        }
+        .dark .doc-cat-banner-icon {
+          background: #1e1e1e;
+          border-color: #2a2a2a;
         }
         .doc-cat-banner-title {
           font-size: 1.75rem;
@@ -529,12 +533,15 @@ const DocumentsPage = () => {
           margin: 0 0 0.2rem;
         }
         .doc-cat-banner-subtitle {
-          color: rgba(255,255,255,0.65);
+          color: #64748b;
           margin: 0;
           font-size: 0.9rem;
         }
+        .dark .doc-cat-banner-subtitle {
+          color: #94a3b8;
+        }
         .doc-cat-count {
-          color: rgba(255,255,255,0.5);
+          color: #94a3b8;
           font-size: 0.85rem;
           margin: 0;
         }
@@ -637,18 +644,25 @@ const DocumentsPage = () => {
           align-items: center;
           gap: 1.25rem;
           padding: 1.5rem;
-          border: 1px solid;
+          border: 1px solid #e2e8f0;
           border-radius: 16px;
           background: #fff;
           margin-bottom: 1.5rem;
         }
-        .dark .doc-detail-header { background: #111118; }
+        .dark .doc-detail-header { 
+          background: #111111; 
+          border-color: #2a2a2a;
+        }
         .doc-detail-icon-wrap {
           width: 56px; height: 56px;
           border-radius: 14px;
+          background: #f1f5f9;
           display: flex; align-items: center; justify-content: center;
           font-size: 1.4rem;
           flex-shrink: 0;
+        }
+        .dark .doc-detail-icon-wrap {
+          background: #1e1e1e;
         }
         .doc-detail-title {
           font-size: 1.5rem;
@@ -757,22 +771,27 @@ const DocumentsPage = () => {
           gap: 0.5rem;
           padding: 0.5rem 1.1rem;
           border-radius: 10px;
-          border: 1.5px solid;
-          background: transparent;
+          border: 1.5px solid #e2e8f0;
+          background: #fff;
           font-size: 0.875rem;
           font-weight: 600;
           cursor: pointer;
-          transition: background 0.2s, color 0.2s;
+          transition: background 0.2s, color 0.2s, border-color 0.2s;
           margin-bottom: 1.5rem;
+          color: #1e3a8a;
         }
-        .doc-back-btn:hover { background: rgba(255,255,255,0.1); }
-        .doc-back-btn--light {
-          border-color: rgba(255,255,255,0.4);
-          color: rgba(255,255,255,0.8);
+        .dark .doc-back-btn {
+          background: #111111;
+          border-color: #2a2a2a;
+          color: #c2a878;
         }
-        .doc-back-btn--light:hover {
-          background: rgba(255,255,255,0.1);
-          color: #fff;
+        .doc-back-btn:hover { 
+          background: #f1f5f9; 
+          border-color: #1d4ed8;
+        }
+        .dark .doc-back-btn:hover {
+          background: #1e1e1e;
+          border-color: #c2a878;
         }
 
         @media (max-width: 640px) {
