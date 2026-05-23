@@ -51,11 +51,11 @@ const askAI = async (message, retries = 2) => {
 
     if (status === 502) {
       // Retries exhausted
-      throw new Error("AI backend returned 502 after retries. Check your FastAPI server logs on Render.");
+      throw new Error("Please try again in a minute.");
     }
 
     if (error.code === "ECONNABORTED") {
-      throw new Error("AI Service timed out. The server may be waking up — try again in 30 seconds.");
+      throw new Error("AI Service timed out. The server may be waking up — try again in a minute.");
     }
 
     throw new Error(`AI Connection Failed: ${error.message}`);

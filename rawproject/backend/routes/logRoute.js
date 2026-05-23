@@ -1,8 +1,8 @@
 
 import express from "express"
 
-const app = express.Router();
+const router = express.Router();
 
-app.get('/logs',logsDetails);
+router.get('/logs',logsDetails);
 
-export default app;
+export default router;

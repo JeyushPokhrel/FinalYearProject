@@ -322,6 +322,22 @@ def health():
     }
 
 
+@app.get("/stats")
+def get_stats():
+    return _load_json_file(STATS_PATH, {
+        "total_queries":             0,
+        "successful":                0,
+        "failed":                    0,
+        "average_response_time_sec": 0.0,
+        "average_confidence":        0.0,
+    })
+
+
+@app.get("/logs")
+def get_logs():
+    return _load_json_file(LOGS_PATH, [])
+
+
 @app.post("/chat")
 async def chat(req: ChatRequest):
     """
