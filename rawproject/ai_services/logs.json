@@ -62,5 +62,45 @@
     "response_time_sec": 1.3216,
     "success": true,
     "error": null
+  },
+  {
+    "timestamp": "2026-05-23 22:08:25",
+    "question": "hi",
+    "answer": "Namaste! I am your AI Legal Assistant for Nepali law. How can I help you today?",
+    "response_time_sec": 0.007,
+    "success": true,
+    "error": null
+  },
+  {
+    "timestamp": "2026-05-23 22:08:28",
+    "question": "hello",
+    "answer": "Namaste! I am your AI Legal Assistant for Nepali law. How can I help you today?",
+    "response_time_sec": 0.0284,
+    "success": true,
+    "error": null
+  },
+  {
+    "timestamp": "2026-05-23 22:08:35",
+    "question": "accident",
+    "answer": "Based on the Nepali legal documents, here are the relevant sections:\n\n#### Labour - Section 55\nAccidental insurance to be made:\n\n(1) The employer shall procure accidental insurance of at least seven hundred thousand rupees covering all kinds of accidents for each labour. (2) The whole premium required for the accidental insurance referred to in sub-section (1) shall be borne by the employer. (3) If a labour dies or gets completely incapacitated mentally or physically as a result of an accident, such a labour or his or her legal heir under the prevailing law shall get for compensation the cent percent of the amount of insurance referred to in sub-section (1). (4) If a labour gets injured or incapacitated in an accident, he or she shall get compensation on the basis of the percentage of incapacitation as prescribed.\n\n---\n\n#### Labour - Section 79\nTo give information:\n\nWhere any accident occurs or any person is injured or dies in an accident or suffers from any occupational disease in the workplace, the employer shall give information thereof to the Office immediately.\n\n---\n\n#### finance - Section 252\nThe existing alignment of the Pushpalal Mid-Hill Highway will be revised to reduce travel time, cost, distance, and accidents.\n\nPreparations will be made to upgrade this highway to a dedicated double lane with tunnel and viaduct technology. I have allocated Rs. 3.94 billion for this purpose.\n\n---\n\n",
+    "response_time_sec": 0.0321,
+    "success": true,
+    "error": null
+  },
+  {
+    "timestamp": "2026-05-23 22:09:37",
+    "question": "i had an accident ",
+    "answer": "Based on the Nepali legal documents, here are the relevant sections:\n\n#### Labour - Section 55\nAccidental insurance to be made:\n\n(1) The employer shall procure accidental insurance of at least seven hundred thousand rupees covering all kinds of accidents for each labour. (2) The whole premium required for the accidental insurance referred to in sub-section (1) shall be borne by the employer. (3) If a labour dies or gets completely incapacitated mentally or physically as a result of an accident, such a labour or his or her legal heir under the prevailing law shall get for compensation the cent percent of the amount of insurance referred to in sub-section (1). (4) If a labour gets injured or incapacitated in an accident, he or she shall get compensation on the basis of the percentage of incapacitation as prescribed.\n\n---\n\n#### Labour - Section 79\nTo give information:\n\nWhere any accident occurs or any person is injured or dies in an accident or suffers from any occupational disease in the workplace, the employer shall give information thereof to the Office immediately.\n\n---\n\n#### finance - Section 252\nThe existing alignment of the Pushpalal Mid-Hill Highway will be revised to reduce travel time, cost, distance, and accidents.\n\nPreparations will be made to upgrade this highway to a dedicated double lane with tunnel and viaduct technology. I have allocated Rs. 3.94 billion for this purpose.\n\n---\n\n",
+    "response_time_sec": 0.0293,
+    "success": true,
+    "error": null
+  },
+  {
+    "timestamp": "2026-05-23 22:10:42",
+    "question": "criminal",
+    "answer": "Based on the Nepali legal documents, here are the relevant sections:\n\n#### Criminal1 - Section 33\nProhibition of criminal conspiracy:\n\n(1) No person shall make a criminal conspiracy. (2) Where two or more persons agree to commit, or cause the commission of, an offence, and any act is done by only one or two of them, they shall be considered to have committed a criminal conspiracy. (3) A person who commits, or causes the commission of, a criminal conspiracy to commit an offence of heinous or grave nature shall, where no provision is made elsewhere in this Act for a separate punishment for such conspiracy, be punished as follows: (a) Where the offence in pursuance of the criminal conspiracy is committed, punishment imposable if the offence had been committed, (b) Where another offence instead of the offence in pursuance of the criminal conspiracy is committed and such other offence is committed in the course of implementation of such conspiracy or as probable consequence thereof, punishment specified for that offence, (c) Where any offence in addition to the offence in pursuance of the criminal conspiracy is also committed and such offence is also committed in the course of implementation of such conspiracy or as a probable consequence thereof, additional punishment also for such offence, (d) Where the offence of criminal conspiracy is yet to be completed, one half of the punishment specified for that offence.\n\n---\n\n#### Criminal1 - Section 29\nCriminal intention not to be examined in strict liability offence:\n\nIn an offence which is a strict liability offence under this Act or the law, there shall not be examined whether or not the offence was committed intentionally.\n\n---\n\n#### Criminal1 - Section 196\nProhibition of using criminal force:\n\n(1) No person shall use criminal force to another person. (2) A person shall be considered to use criminal force to another person if he or she does any of the following acts: (a) To use any kind of force to that other person with the intention of committing an offence, (b) To use force to that other person with the intention of causing, or knowing it to be likely that the use of such force will cause, injury, fear or annoyance to that other person or his or her family or property, (c) To terrify that other person to apprehend that force will be used to him or her or to threat or intimidate to use force, or attempt to use force, in any other manner, to him or her. (3) Notwithstanding anything contained elsewhere in this Section, the use of any force, with one's consent, in the course of imparting teaching, instruction or training on the concerned subject, conducting acting or treatment of any kind or in a manner to render benefit or the use of force of usual nature in the course of having any kind of game shall not be considered to be the use of criminal force. Provided that the provision of this sub-section shall not apply to any malicious use of force to cause injury to any one. (4) A person who uses, or causes to be used, criminal force shall be liable to a sentence of imprisonment for a term not exceeding three years or a fine not exceeding thirty thousand rupees or both the sentences, in the case of using criminal force by carrying a weapon, and to a sentence of imprisonment for a term not exceeding one year or a fine not exceeding ten thousand rupees or both the sentences, in the case of using criminal force without carrying a weapon.\n\n---\n\n",
+    "response_time_sec": 0.1111,
+    "success": true,
+    "error": null
   }
 ]
